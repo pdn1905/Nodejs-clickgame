@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Click Click Click</title>
+        <style type="text/css">
+
+        </style>
+        <script src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript">
+        window.onload = function() {
+
+  var welcome = document.getElementById("welcome");
+  var allUsers = document.getElementById("users");
+  var progress = document.getElementById("progress");
+  var results = document.getElementById("results");
+
+  var socket = io.connect('http://localhost:7777');
+  socket.on('welcome', function (data) {
+      console.log(data);
+      welcome.innerHTML = "Hello <strong>" + data.name + "</strong>";
+  });
+  socket.on('users', function (data) {
+      allUsers.innerHTML = "<strong>Users:</strong><br>" + data.users;
+  });
+  socket.on('update', function (data) {
+      progress.innerHTML = data.currentClick;
+      progress.style.width = parseInt(data.currentClick) + "px";
+  });
+  socket.on('win', function (data) {
+      results.innerHTML = data.message;
+  });
+
+  mybutton.onclick = function() {
+      socket.emit("click");
+  }
+
+}
+        </script>
+    </head>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <body class="main">
+        <div id="welcome"></div>
+        <hr />
+        <div id="progress"></div>
+        <div id="win">150</div>
+        <hr />
+        <div><div id="users"></div></div>
+        <hr />
+        <div id="results"></div>
+        <input type="button" class="btn btn-primary" id = "mybutton" name = "click" value ="Click me" />
+    </body>
+</html>
